@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-
+#
+# workaround for annoying screen auto-lock 
+#
 import time
 import pyautogui
 
