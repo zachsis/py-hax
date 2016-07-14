@@ -4,38 +4,32 @@ from email.mime.text import MIMEText
 import argparse
 
 p = argparse.ArgumentParser()
-p.add_argument(
-               '-s', 
+p.add_argument('-s', 
                '--server', 
                type=str, 
                help='smtp server', 
                required='True')
-p.add_argument(
-               '-p', 
+p.add_argument('-p', 
                '--port', 
                type=int, 
                help='smtp server port', 
                required='True')
-p.add_argument(
-               '-t', 
+p.add_argument('-t', 
                '--to', 
                type=str, 
                help='to address', 
                required='True')
-p.add_argument(
-              '-f', 
+p.add_argument('-f', 
               '--From', 
               type=str, 
               help='from address', 
               required='True')
-p.add_argument(
-              '-j', 
+p.add_argument('-j', 
               '--subject', 
               type=str, 
               help='email subject', 
               required='True')
-p.add_argument(
-              '-F', 
+p.add_argument('-F', 
               '--filename', 
               type=str, 
               help='file attachment', 
