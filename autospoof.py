@@ -5,17 +5,41 @@ import argparse
 
 p = argparse.ArgumentParser()
 p.add_argument(
-'-s', '--server', type=str, help='smtp server', required='True')
+               '-s', 
+               '--server', 
+               type=str, 
+               help='smtp server', 
+               required='True')
 p.add_argument(
-'-p', '--port', type=int, help='smtp server port', required='True')
+               '-p', 
+               '--port', 
+               type=int, 
+               help='smtp server port', 
+               required='True')
 p.add_argument(
-'-t', '--to', type=str, help='to address', required='True')
+               '-t', 
+               '--to', 
+               type=str, 
+               help='to address', 
+               required='True')
 p.add_argument(
-'-f', '--From', type=str, help='from address', required='True')
+              '-f', 
+              '--From', 
+              type=str, 
+              help='from address', 
+              required='True')
 p.add_argument(
-'-j', '--subject', type=str, help='email subject', required='True')
+              '-j', 
+              '--subject', 
+              type=str, 
+              help='email subject', 
+              required='True')
 p.add_argument(
-'-F', '--filename', type=str, help='file attachment', required='False')
+              '-F', 
+              '--filename', 
+              type=str, 
+              help='file attachment', 
+              required='False')
 args = p.parse_args()
 
 class mysmtp:
