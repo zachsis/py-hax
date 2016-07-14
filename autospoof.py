@@ -48,7 +48,6 @@ class mysmtp:
    def send_message(self):
         
        msg = MIMEMultipart('alternative')
-    
        msg['From'] = self.fromEmail
        msg['To'] = self.toEmail
        msg['Subject'] = self.subject
