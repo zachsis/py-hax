@@ -33,18 +33,17 @@ p.add_argument('-j',
 p.add_argument('-f', 
               '--filename', 
               type=str, 
-              help='file attachment', 
-              required='False')
+              help='file attachment')
 args = p.parse_args()
 
 class mysmtp:
-   def __init__(self, server, port, toEmail, fromEmail, subject, filename):
+   def __init__(self, server, port, toEmail, fromEmail, subject):
        self.server = server 
        self.port = port
        self.toEmail = toEmail
        self.fromEmail = fromEmail
        self.subject = subject
-       self.filename = filename
+       self.filename = ''
 
    def send_message(self):
         
@@ -73,5 +72,7 @@ class mysmtp:
            print '[!] could not connect'
 
 
-q = mysmtp(args.server, args.port, args.to, args.From, args.subject, args.filename)
+q = mysmtp(args.server, args.port, args.to, args.From, args.subject)
+if args.filename:
+    q.filename = args.filename
 q.send_message()
