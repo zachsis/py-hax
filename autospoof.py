@@ -48,8 +48,8 @@ p.add_argument('-j',
                type=str,
                help='email subject',
                required='True')
-p.add_argument('-f',
-               '--filename',
+p.add_argument('-a',
+               '--attachment',
                type=str,
                help='file attachment')
 p.add_argument('-P',
@@ -70,7 +70,7 @@ args = p.parse_args()
 class MySmtp:
     def __init__(self, server, port, rcptto, mailfrom, subject,
                  displayname='', displayemail='',
-                 replyto='', filename='', bodyfile='', sender=''):
+                 replyto='', attachment='', bodyfile='', sender=''):
         self.server = server
         self.port = port
         self.rcptto = rcptto
@@ -79,7 +79,7 @@ class MySmtp:
         self.displayname = displayname
         self.displayemail = displayemail
         self.replyto = replyto
-        self.filename = filename
+        self.attachment = attachment
         self.bodyfile = bodyfile
         self.sender = sender
 
@@ -102,13 +102,13 @@ class MySmtp:
             content = MIMEText(f.read(), 'plain')
 #            content = MIMEText(self.body, 'plain')
             msg.attach(content)
-        if self.filename:
-            f = file(self.filename)
-            attachment = MIMEText(f.read())
-            attachment.add_header('Content-Disposition',
-                                  'attachment',
-                                  filename=self.filename)
-            msg.attach(attachment)
+        if self.attachment:
+            f = file(self.attachment)
+            att = MIMEText(f.read())
+            att.add_header('Content-Disposition',
+                           'attachment',
+                           filename=self.attachment)
+            msg.attach(att)
         try:
             print '[+] attempting to send message'
             s = smtplib.SMTP(self.server, self.port)
