@@ -127,7 +127,7 @@ def main():
                args.displayname,
                args.displayemail,
                args.replyto,
-               args.filename,
+               args.attachment,
                args.bodyfile,
                args.sender)
 
