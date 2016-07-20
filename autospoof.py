@@ -4,6 +4,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import argparse
 
+
+### Need to add a Sender header option
+
 p = argparse.ArgumentParser()
 p.add_argument('-s',
                '--server',
@@ -40,12 +43,6 @@ p.add_argument('-l',
                help='display from email to fool mail clients. ' +
                     'useful if you cant spoof your MAILFROM'
                )
-p.add_argument('-x',
-               '--xsender',
-               type=str,
-               help='rtfm or rtfrfc' +
-                    'useful if you cant spoof your MAILFROM',
-               )
 p.add_argument('-j',
                '--subject',
                type=str,
@@ -59,8 +56,8 @@ p.add_argument('-P',
                '--replyto',
                type=str,
                help='reply to header. rtfrfc')
-p.add_argument('-R',
-               '--returnpath',
+p.add_argument('-b',
+               '--body',
                type=str,
                help='reply to header. rtfrfc')
 args = p.parse_args()
@@ -68,8 +65,8 @@ args = p.parse_args()
 
 class MySmtp:
     def __init__(self, server, port, rcptto, mailfrom, subject,
-                 displayname='', displayemail='', xsender='',
-                 replyto='', returnpath='', filename=''):
+                 displayname='', displayemail='',
+                 replyto='', filename='', body=''):
         self.server = server
         self.port = port
         self.rcptto = rcptto
@@ -78,34 +75,21 @@ class MySmtp:
         self.displayname = displayname
         self.displayemail = displayemail
         self.replyto = replyto
-        self.xsender = xsender
         self.filename = filename
-        self.returnpath = returnpath
+        self.body = body
 
     def send_message(self):
         msg = MIMEMultipart('alternative')
-        msg['From'] = self.mailfrom
         msg['To'] = self.rcptto
         msg['Subject'] = self.subject
-
         if self.displayname:
-            d = "{} \"<{}>\"\r\n".format(self.displayname, self.displayemail)
+            msg['From'] = "{} <{}>".format(self.displayname, self.displayemail)
         else:
-            d = ''
-        if self.xsender:
-            x = "X-Sender: {} \"<{}>\"\r\n".format(self.displayname, self.displayemail)
-        else:
-            x = ''
+            msg['From'] = "{}".format(self.mailfrom)
         if self.replyto:
-            rto = "Reply-To: {} \"{}\"\r\n".format(self.displayname, self.replyto)
-        else:
-            rto = ''
-        if self.returnpath:
-            rpat = "Return-Path: {} \"{}\"\r\n".format(self.displayname, self.returnpath)
-        else:
-            rpat = ''
-        body = "{}{}{}{}sent w/ smtplib and email.mime py libs".format(d, x, rto, rpat)
-        content = MIMEText(body, 'plain')
+            rto = "{}".format(self.replyto)
+            msg.add_header('Reply-To', rto)
+        content = MIMEText(self.body, 'plain')
         msg.attach(content)
         if self.filename:
             f = file(self.filename)
@@ -131,9 +115,7 @@ def main():
                args.subject,
                args.displayname,
                args.displayemail,
-               args.xsender,
                args.replyto,
-               args.returnpath,
                args.filename)
 
     q.send_message()
