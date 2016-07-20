@@ -57,16 +57,20 @@ p.add_argument('-P',
                type=str,
                help='reply to header. rtfrfc')
 p.add_argument('-b',
-               '--body',
+               '--bodyfile',
                type=str,
-               help='reply to header. rtfrfc')
+               help='text file to import as the message body.')
+p.add_argument('-S',
+               '--sender',
+               type=str,
+               help='Sender header, useful for spoofing. rtfrfc')
 args = p.parse_args()
 
 
 class MySmtp:
     def __init__(self, server, port, rcptto, mailfrom, subject,
                  displayname='', displayemail='',
-                 replyto='', filename='', body=''):
+                 replyto='', filename='', bodyfile='', sender=''):
         self.server = server
         self.port = port
         self.rcptto = rcptto
@@ -76,7 +80,8 @@ class MySmtp:
         self.displayemail = displayemail
         self.replyto = replyto
         self.filename = filename
-        self.body = body
+        self.bodyfile = bodyfile
+        self.sender = sender
 
     def send_message(self):
         msg = MIMEMultipart('alternative')
@@ -89,8 +94,14 @@ class MySmtp:
         if self.replyto:
             rto = "{}".format(self.replyto)
             msg.add_header('Reply-To', rto)
-        content = MIMEText(self.body, 'plain')
-        msg.attach(content)
+        if self.sender:
+            sen = "{}".format(self.sender)
+            msg.add_header('Sender', sen)
+        if self.bodyfile:
+            f = file(self.bodyfile)
+            content = MIMEText(f.read(), 'plain')
+#            content = MIMEText(self.body, 'plain')
+            msg.attach(content)
         if self.filename:
             f = file(self.filename)
             attachment = MIMEText(f.read())
@@ -116,7 +127,9 @@ def main():
                args.displayname,
                args.displayemail,
                args.replyto,
-               args.filename)
+               args.filename,
+               args.bodyfile,
+               args.sender)
 
     q.send_message()
 
