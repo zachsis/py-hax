@@ -4,9 +4,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import argparse
 
-
-### Need to add a Sender header option
-
 p = argparse.ArgumentParser()
 p.add_argument('-s',
                '--server',
@@ -41,8 +38,7 @@ p.add_argument('-l',
                '--displayemail',
                type=str,
                help='display from email to fool mail clients. ' +
-                    'useful if you cant spoof your MAILFROM'
-               )
+                    'useful if you cant spoof your MAILFROM')
 p.add_argument('-j',
                '--subject',
                type=str,
@@ -100,7 +96,6 @@ class MySmtp:
         if self.bodyfile:
             f = file(self.bodyfile)
             content = MIMEText(f.read(), 'plain')
-#            content = MIMEText(self.body, 'plain')
             msg.attach(content)
         if self.attachment:
             f = file(self.attachment)
@@ -116,7 +111,6 @@ class MySmtp:
             print '[$] successfully sent through {}:{}'.format(self.server, self.port)
         except socket.error as e:
             print '[!] could not connect'
-
 
 def main():
     q = MySmtp(args.server,
