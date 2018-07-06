@@ -1,8 +1,12 @@
+'''
+CLI tool for crafting email payloads. 
+'''
 import smtplib
 import socket
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import argparse
+
 
 
 
